@@ -30,14 +30,27 @@ struct ContentView: View {
         }
         .padding()
         .fullScreenCover(isPresented: $viewModel.isPresent) {
-            QrScannerView(codeTypes: [.qr]) { response in
-                switch response {
-                case .success(let result):
-                    openURL(URL(string: result)!)
-                    viewModel.isPresent = false
-                case .failure(_):
-                    viewModel.isError = true
+            ZStack {
+                QrScannerView(codeTypes: [.qr]) { response in
+                    switch response {
+                    case .success(let result):
+                        openURL(URL(string: result)!)
+                        viewModel.isPresent = false
+                    case .failure(_):
+                        viewModel.isError = true
+                    }
                 }
+                VStack{
+                    Spacer()
+                    Button(action: {
+                        viewModel.isPresent = false
+                    }) {
+                        Text("Close")
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                }.padding()
             }
         }
         .alert(isPresented: $viewModel.isError) {
