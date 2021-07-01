@@ -16,7 +16,7 @@ struct QrScannerView: UIViewControllerRepresentable {
 
      init(
         scanInterval: Double = 2.0,
-        codeTypes: [AVMetadataObject.ObjectType],
+        codeTypes: [AVMetadataObject.ObjectType] = [.qr],
         completion: @escaping (Result<String, ScanError>) -> Void)
      {
         self.scanInterval = scanInterval

@@ -31,12 +31,20 @@ struct ContentView: View {
         .padding()
         .fullScreenCover(isPresented: $viewModel.isPresent) {
             ZStack {
-                QrScannerView(codeTypes: [.qr]) { response in
+                QrScannerView { response in
                     switch response {
                     case .success(let result):
-                        openURL(URL(string: result)!)
+                        openURL(URL(string: result)!) { result in
+                            if !result {
+                                viewModel.errorTitle = "Error URL"
+                                viewModel.errorMessage = "Invalid URL"
+                                viewModel.isError = true
+                            }
+                        }
                         viewModel.isPresent = false
                     case .failure(_):
+                        viewModel.errorTitle = "Error"
+                        viewModel.errorMessage = "Something went wrong"
                         viewModel.isError = true
                     }
                 }
@@ -54,7 +62,10 @@ struct ContentView: View {
             }
         }
         .alert(isPresented: $viewModel.isError) {
-            Alert(title: Text("Error"), message: Text("Something went wrong"))
+            Alert(
+                title: Text(viewModel.errorTitle),
+                message: Text(viewModel.errorMessage)
+            )
         }
     }
 }

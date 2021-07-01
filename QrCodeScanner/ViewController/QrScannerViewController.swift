@@ -12,6 +12,7 @@ import AVFoundation
 class QrScannerViewController: UIViewController {
     var delegate: QrScannerCoordinator?
     var captureSession: AVCaptureSession!
+    var previewLayer: AVCaptureVideoPreviewLayer!
     let videoCaptureDevice = AVCaptureDevice.default(for: .video)
     let metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
 
@@ -46,6 +47,13 @@ class QrScannerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        if previewLayer == nil {
+            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        }
+        previewLayer.frame = view.layer.bounds
+        previewLayer.videoGravity = .resizeAspectFill
+        view.layer.addSublayer(previewLayer)
+        
         if (captureSession?.isRunning == false) {
             captureSession.startRunning()
         }

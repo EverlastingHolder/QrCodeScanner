@@ -12,6 +12,8 @@ extension ContentView {
     class ViewModel: ObservableObject {
         @Published var isPresent: Bool = false
         @Published var isError: Bool = false
+        @Published var errorTitle: String = ""
+        @Published var errorMessage: String = ""
     }
 }
 
